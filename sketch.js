@@ -4,9 +4,12 @@ var rows;
 var w = 40;
 var canvasW= 401;
 var totalBees=20;
+var fontSize= w * 0.5;
 
 function setup() {
     createCanvas(canvasW, canvasW);    
+    textAlign(CENTER, CENTER);
+    textSize(fontSize);
     cols = floor(width / w);
     rows = floor(height / w);
     grid = make2DArray(cols,rows);
@@ -63,19 +66,26 @@ function gameOver(){
     }
 }
 
-function mousePressed(){
+function mousePressed(event){   
+    
     for(var i=0; i < cols; i++){
         for(var j=0; j < rows; j++){
             if(grid[i][j].contains(mouseX, mouseY)){
-                grid[i][j].reveal();
-
-                if(grid[i][j].bee){
-                    gameOver();
-                }
+                // if left clicked
+                if(event.button == 0){
+                    grid[i][j].reveal();    
+                    if(grid[i][j].bee){
+                        grid[i][j].backgroundColor = color(255, 0 ,0);
+                        gameOver();
+                    }
+                }else if(event.button == 2){ // if right clicked
+                    grid[i][j].toggleFlag();
+                }   
                 return;
             }
         }
     }
+     
 }
 
 function make2DArray(cols, rows){

@@ -7,29 +7,63 @@ function Cell(i, j, w){
     this.neighborCount= -1;
     this.bee = false;
     this.revealed = false;  
+    this.backgroundColor = color(190);
+    this.flagged = false;
+
 }
 
 Cell.prototype.show = function(){
-
-    stroke(0);
-    noFill();
     
-    rect(this.x, this.y, this.w, this.w)
-    if(this.revealed){
+    if(this.revealed && !this.flagged){
+        stroke(0);
+        fill(this.backgroundColor);
+        rect(this.x, this.y, this.w, this.w)
         if(this.bee){
             stroke(0);
             fill(127);
             ellipse(this.x + this.w * 0.5 , this.y + this.w * 0.5 , this.w * 0.5)
         }else{
-            fill(190)
+            fill(255)
             rect(this.x, this.y, this.w, this.w);
             if(this.neighborCount > 0){                
                 textAlign(CENTER);
-                fill(0);
+                
+
+                switch(this.neighborCount) {
+                    case 1:
+                        fill(0 , 0 , 255);
+                        stroke(0 , 0 , 255);
+                      break;
+                    case 2:
+                        fill(0, 128, 0);
+                        stroke(0, 128, 0);
+                      break;
+                    case 3:
+                        fill(255, 87, 34);
+                        stroke(255, 87, 34);
+                      break;
+                    default:
+                        fill(244, 67, 54);
+                        stroke(244, 67, 54);
+                  }
+
                 text(this.neighborCount, this.x + this.w * 0.5, this.y + this.w * 0.7);
             }
         }
+    }else if(this.flagged && this.revealed == false){
+        stroke(0);
+        fill(255, 0 ,0);
+        ellipse(this.x + this.w * 0.5 , this.y + this.w * 0.5 , this.w * 0.5)
+    }else if(this.revealed == false){
+        stroke(0);
+        fill(this.backgroundColor);
+        rect(this.x, this.y, this.w, this.w)
     }
+}
+
+
+Cell.prototype.toggleFlag = function(){
+    this.flagged = !this.flagged;
 }
 
 Cell.prototype.countNeighbors = function(){
